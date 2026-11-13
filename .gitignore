@@ -1,0 +1,14 @@
+# Runtime/user data and local artifacts
+qa/
+*.luma
+*.zip
+*.tar.gz
+*.log
+.env
+.env.*
+!.env.example
+.openai/
+.codex/
+node_modules/
+Thumbs.db
+.DS_Store
