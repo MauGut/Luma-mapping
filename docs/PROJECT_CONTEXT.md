@@ -74,4 +74,6 @@ Estas son propuestas de continuidad, no compromisos ni funcionalidades entregada
 
 La primera beta se publicó con acceso privado en Sites. El repositorio GitHub permite continuar el código desde otra PC y no contiene su configuración de alojamiento. No hay despliegue automático desde GitHub.
 
+El 13 de noviembre de 2026 se actualizó el mismo sitio privado a beta 0.2 con los colores sólidos y transiciones del commit `c9fc0bb`. Los archivos de la aplicación se compararon byte a byte con la copia de GitHub ya probada antes de empaquetar. Sites confirmó la publicación exitosa en https://luma-mapping-workshop-beta.hillyden8.chatgpt.site. Se conservó el acceso privado; no se cambiaron los permisos.
+
 El repositorio no guarda las fotos ni los clips de los participantes. Para transferir un montaje entre equipos, exportar su `.luma` y copiarlo por separado.

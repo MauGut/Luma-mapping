@@ -2,6 +2,8 @@
 
 Aplicación de videomapping local para talleres artísticos. No requiere cuenta ni conexión al abrir la copia portable. No usa librerías externas, analítica ni subidas de archivos.
 
+[Abrir beta web 0.2 (acceso privado)](https://luma-mapping-workshop-beta.hillyden8.chatgpt.site). Actualizada el 13 de noviembre de 2026 con colores sólidos por superficie y transiciones. Para el workshop sin conexión, usar la copia local.
+
 ## Continuar desde otra PC con Codex
 
 ```sh
