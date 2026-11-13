@@ -22,3 +22,26 @@ test('silueta preserva concavidades y no selecciona transparencia',()=>{
 const fixture=()=>({format:'luma-workshop',version:1,name:'Prueba',media:[],photo:null,scenes:[],surfaces:[{id:'a',name:'A',media:'aurora',points:[{x:0,y:0},{x:1,y:0},{x:1,y:1}],holes:[],opacity:1,brightness:1,saturation:1,hue:0,blend:'source-over',visible:true}]});
 test('proyecto guarda y recupera geometría, curvas y huecos',()=>{const p=fixture();p.surfaces[0].points[0].out={x:.2,y:0};p.surfaces[0].holes=[[{x:.2,y:.2},{x:.4,y:.2},{x:.4,y:.4}]];assert.deepEqual(C.validateProject(JSON.parse(JSON.stringify(p))),p);});
 test('importación rechaza referencias perdidas, coordenadas inválidas y medios remotos',()=>{let p=fixture();p.surfaces[0].media='missing';assert.throws(()=>C.validateProject(p));p=fixture();p.surfaces[0].points[0].x=NaN;assert.throws(()=>C.validateProject(p));p=fixture();p.media=[{id:'bad',name:'bad',type:'image',data:'https://example.com/file.png'}];assert.throws(()=>C.validateProject(p));});
+test('proyecto y escenas conservan colores independientes junto a fuentes de video',()=>{
+ const p=fixture();p.surfaces[0].media='solid';p.surfaces[0].solidColor='#FF8040';
+ const second=structuredClone(p.surfaces[0]);second.id='b';second.solidColor='#40c0ff';p.surfaces.push(second);
+ p.scenes=[{id:'scene',name:'Colores',surfaces:structuredClone(p.surfaces)}];
+ p.surfaces[0].media='aurora';
+ const loaded=C.validateProject(JSON.parse(JSON.stringify(p)));
+ assert.equal(loaded.surfaces[0].media,'aurora');assert.equal(loaded.surfaces[0].solidColor,'#FF8040');
+ assert.equal(loaded.surfaces[1].solidColor,'#40c0ff');assert.equal(loaded.scenes[0].surfaces[0].media,'solid');
+ assert.equal(loaded.media.length,0);
+});
+test('sólidos requieren un color hex válido también dentro de escenas',()=>{
+ for(const value of [undefined,null,123,'red','#fff','#fffffff','#12GG00','url(https://example.com)']){
+  const p=fixture();p.surfaces[0].media='solid';p.surfaces[0].solidColor=value;
+  assert.throws(()=>C.validateProject(p));
+  const sceneProject=fixture();sceneProject.scenes=[{id:'s',name:'Color inválido',surfaces:p.surfaces}];
+  assert.throws(()=>C.validateProject(sceneProject));
+ }
+});
+test('proyectos previos sin color siguen siendo válidos y solid es un id reservado',()=>{
+ const p=fixture();assert.deepEqual(C.validateProject(p),p);
+ p.media.push({id:'solid',name:'Conflicto',type:'image',data:'data:image/png;base64,AAAA'});
+ assert.throws(()=>C.validateProject(p));
+});

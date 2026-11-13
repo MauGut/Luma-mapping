@@ -1,6 +1,6 @@
 # Contexto y continuidad
 
-Actualizado: 13 de noviembre de 2026. Estado: beta 0.1.
+Actualizado: 13 de noviembre de 2026. Estado: beta 0.2.
 
 ## Decisiones acordadas con Mauricio
 
@@ -15,6 +15,8 @@ La intención a futuro es una aplicación distribuible y utilizable sin conexió
 - Foto local con opacidad y corrección de cuatro esquinas, sólo visible en el editor.
 - Detección de regiones contiguas por similitud de color, tolerancia configurable y contorno editable.
 - Importación de imágenes y videos; reproducción compartida por recurso, en bucle y sin audio.
+- Color sólido independiente por superficie, selector, muestras y entrada hexadecimal. **Aplicar color** confirma el cambio con corte o fundido de 0,5, 1 o 2 segundos; también funciona al cambiar entre color y clip. Respeta huecos, curvas, opacidad, filtros y modos de mezcla.
+- Colores incluidos en escenas, duplicado, undo/redo y exportación/importación `.luma`. Los archivos de beta 0.1 siguen abriendo; los proyectos que usan `media: "solid"` requieren beta 0.2 o posterior.
 - Opacidad, brillo, saturación, tono y mezcla de capas.
 - Perspectiva para cuadriláteros convexos rectos; recorte por contorno para las otras formas.
 - Corte/fundido de 0,5, 1 o 2 segundos; escenas con estado de superficies.
@@ -30,6 +32,7 @@ La intención a futuro es una aplicación distribuible y utilizable sin conexió
 - Hasta 40 MB por archivo y 120 MB de medios por proyecto; hasta 80 clips y 50 escenas. Proyectos grandes pueden consumir bastante RAM por las data URLs.
 - Silueta por color a resolución reducida: no reconoce objetos complejos con IA ni extrae automáticamente huecos.
 - Los fundidos usan una captura del estado anterior, no dos escenas de video vivas en paralelo.
+- No hay ciclo automático de colores. La duración de fundido se elige durante la sesión, no se guarda en el proyecto.
 - La reproducción puede perder cuadros si el navegador limita el editor en segundo plano/minimizado.
 - No hay audio, MIDI/OSC, sincronización entre notebooks, mezcla de bordes entre proyectores, malla avanzada ni decodificador propio.
 - `app.js` y `style.css` tienen formato compacto. Una futura mejora de mantenibilidad puede formatear/separar módulos sin romper el uso desde `file://`.
@@ -43,6 +46,17 @@ La intención a futuro es una aplicación distribuible y utilizable sin conexió
 - Se exportó y reabrió un proyecto con cuatro superficies, foto y video; se verificó una exportación posterior con una escena.
 - Se invocó la apertura de la ventana de salida, pero no se verificó un proyector físico ni un segundo monitor real. Pendiente verificar fullscreen y rendimiento en Chrome/Edge de las notebooks del taller.
 - No hay CI remota configurada todavía.
+
+### Validación de colores sólidos (beta 0.2)
+
+- Nueve pruebas de core aprobadas: las seis originales más persistencia de colores por superficie/escena, rechazo de colores inválidos y compatibilidad con archivos previos/ID reservado.
+- UI probada a 1366 × 768: naranja y celeste en superficies independientes junto a una fuente animada; entrada hex; corte; fundido de celeste a violeta; undo; hueco triangular sobre color; cambio a fuente generativa y recuperación mediante escena.
+- Proyecto exportado y reabierto con dos colores distintos, un hueco y una escena. Rechazo de hexadecimal inválido y consola sin errores en esta prueba.
+- Sin prueba nueva con proyector físico. El renderer de salida comparte el mismo lienzo de escena donde se dibujan los colores.
+
+### Idea conversada, todavía pendiente
+
+Mauricio propuso usar la foto como velo semitransparente para trazar y eligió poder ocultarla/mostrarla sin perder la alineación. La conversación quedó en pausa antes de implementar esa mejora. La beta conserva el control de opacidad y ajuste de esquinas, pero todavía no tiene un botón dedicado de mostrar/ocultar ni modo de trazado/bloqueo adicional.
 
 ## Prioridades propuestas para continuar
 

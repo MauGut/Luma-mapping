@@ -36,6 +36,8 @@ La foto se toma cerca del lente y con la perspectiva del proyector. Aun así nec
 - `.luma` es JSON con `format: "luma-workshop"` y `version: 1`. Incluye nombre, superficies, escenas, medios en data URLs y foto con su cuadrilátero. Preservar compatibilidad o implementar migración explícita.
 - Los medios del usuario permanecen locales; no subirlos al repositorio, servicios ni logs.
 - Los videos son compartidos por recurso, en bucle y sin audio. El fundido actual parte de una captura del estado anterior.
+- Desde beta 0.2, `media: "solid"` selecciona color fijo por superficie y requiere `solidColor` hexadecimal de seis dígitos. `solid` es un ID reservado; no es un archivo en `state.media`. El color puede conservarse cuando se vuelve a un clip. Validar estos campos también en escenas y preservar lectura de proyectos antiguos sin color.
+- Los controles de color preparan el próximo valor; sólo **Aplicar color** lo confirma con el fundido seleccionado. Debe conservarse en undo/redo, duplicado y escenas.
 - La silueta actual es selección de una región contigua por color a 320 × 180; **no es IA**. Extrae el contorno exterior; los huecos se dibujan manualmente.
 - Usar texto seguro para nombres de proyectos/medios; validar archivos antes de reemplazar el estado actual.
 - Mantener la interfaz en español, el botón de negro accesible y la posibilidad de deshacer ediciones de geometría.

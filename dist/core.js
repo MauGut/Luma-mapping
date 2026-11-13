@@ -20,16 +20,17 @@
     let longest=[];while(edges.size){const first=edges.keys().next().value;let current=first;const loop=[];let budget=w*h*4;while(budget-->0){loop.push({x:current%(w+1),y:Math.floor(current/(w+1))});const ns=edges.get(current);if(!ns)break;const next=ns.pop();if(!ns.length)edges.delete(current);current=next;if(current===first)break;}if(loop.length>longest.length)longest=loop;}
     if(longest.length<4)return [];const half=Math.floor(longest.length/2);let result=[...simplify(longest.slice(0,half+1),1.5).slice(0,-1),...simplify([...longest.slice(half),longest[0]],1.5).slice(0,-1)];if(result.length>220){const stride=Math.ceil(result.length/220);result=result.filter((_,i)=>i%stride===0);}return result.map(p=>({x:p.x/w,y:p.y/h}));
   }
+  function validSolidColor(value){return typeof value==='string'&&/^#[0-9a-fA-F]{6}$/.test(value);}
   function validateProject(p){
     const fail=()=>{throw new Error('El archivo no es un proyecto Luma válido.');};
     if(!p||p.format!=='luma-workshop'||p.version!==1||typeof p.name!=='string'||!Array.isArray(p.surfaces)||p.surfaces.length>100||!Array.isArray(p.media)||p.media.length>80||!Array.isArray(p.scenes)||p.scenes.length>50)fail();
     const point=a=>{if(!a||!Number.isFinite(a.x)||!Number.isFinite(a.y)||Math.abs(a.x)>10||Math.abs(a.y)>10)fail();for(const k of ['in','out'])if(a[k]&&(!Number.isFinite(a[k].x)||!Number.isFinite(a[k].y)||Math.abs(a[k].x)>10||Math.abs(a[k].y)>10))fail();};
-    const mediaIds=new Set(['aurora','rays','grid']);
+    const mediaIds=new Set(['aurora','rays','grid','solid']);
     for(const m of p.media){if(typeof m.id!=='string'||mediaIds.has(m.id)||typeof m.name!=='string'||!['image','video'].includes(m.type)||typeof m.data!=='string'||!/^data:(image\/(png|jpeg|webp)|video\/[a-zA-Z0-9.+-]+);base64,/.test(m.data)||m.data.length>60000000)fail();mediaIds.add(m.id);}
-    const surfaces=ss=>{if(!Array.isArray(ss)||ss.length>100)fail();const ids=new Set();for(const s of ss){if(!s||typeof s.id!=='string'||ids.has(s.id)||typeof s.name!=='string'||!mediaIds.has(s.media)||!Array.isArray(s.points)||s.points.length<3||s.points.length>500||!Array.isArray(s.holes)||s.holes.length>50)fail();ids.add(s.id);s.points.forEach(point);s.holes.forEach(h=>{if(!Array.isArray(h)||h.length<3||h.length>500)fail();h.forEach(point);});for(const [key,min,max] of [['opacity',0,1],['brightness',0,2],['saturation',0,2],['hue',0,360]])if(!Number.isFinite(s[key])||s[key]<min||s[key]>max)fail();if(!['source-over','screen','multiply','lighter'].includes(s.blend))fail();}};
+    const surfaces=ss=>{if(!Array.isArray(ss)||ss.length>100)fail();const ids=new Set();for(const s of ss){if(!s||typeof s.id!=='string'||ids.has(s.id)||typeof s.name!=='string'||!mediaIds.has(s.media)||!Array.isArray(s.points)||s.points.length<3||s.points.length>500||!Array.isArray(s.holes)||s.holes.length>50)fail();if((s.media==='solid'||s.solidColor!==undefined)&&!validSolidColor(s.solidColor))fail();ids.add(s.id);s.points.forEach(point);s.holes.forEach(h=>{if(!Array.isArray(h)||h.length<3||h.length>500)fail();h.forEach(point);});for(const [key,min,max] of [['opacity',0,1],['brightness',0,2],['saturation',0,2],['hue',0,360]])if(!Number.isFinite(s[key])||s[key]<min||s[key]>max)fail();if(!['source-over','screen','multiply','lighter'].includes(s.blend))fail();}};
     surfaces(p.surfaces);for(const s of p.scenes){if(typeof s.id!=='string'||typeof s.name!=='string')fail();surfaces(s.surfaces);}
     if(p.photo){if(typeof p.photo.data!=='string'||!/^data:image\/(png|jpeg|webp);base64,/.test(p.photo.data)||p.photo.data.length>60000000||!Array.isArray(p.photo.quad)||!validQuad(p.photo.quad)||!Number.isFinite(p.photo.opacity)||p.photo.opacity<0||p.photo.opacity>1)fail();p.photo.quad.forEach(point);}
     return p;
   }
-  const api={clamp,projective,validQuad,distSegment,traceRegion,validateProject};root.LumaCore=api;if(typeof module!=='undefined')module.exports=api;
+  const api={clamp,projective,validQuad,distSegment,traceRegion,validSolidColor,validateProject};root.LumaCore=api;if(typeof module!=='undefined')module.exports=api;
 })(typeof globalThis!=='undefined'?globalThis:this);

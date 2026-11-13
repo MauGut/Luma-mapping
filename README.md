@@ -1,4 +1,4 @@
-# Luma — Mapping Workshop · beta 0.1
+# Luma — Mapping Workshop · beta 0.2
 
 Aplicación de videomapping local para talleres artísticos. No requiere cuenta ni conexión al abrir la copia portable. No usa librerías externas, analítica ni subidas de archivos.
 
@@ -28,9 +28,9 @@ La aplicación publicada requiere conexión para cargar. Para usar sin internet,
 3. Crear superficies rectangulares o usar **Pluma**. Clic agrega puntos; Enter o clic en el primer punto cierra; Escape cancela.
 4. En **Mover**, arrastrar nodos o el interior de una superficie. Doble clic en un borde recto agrega un nodo. Seleccionar un nodo y **Curvar nodo** crea dos tiradores Bézier independientes. **Hueco** crea una exclusión dentro de la superficie seleccionada.
 5. **Silueta** selecciona una región contigua de color similar en la foto. Ajustar tolerancia y corregir los nodos generados. Es segmentación por color a 320 × 180, no reconocimiento de objetos con IA; extrae el contorno exterior y los huecos se dibujan manualmente.
-6. Importar videos o imágenes, seleccionar una superficie y pulsar un clip. Incluye tres fuentes generativas para probar sin archivos.
+6. Importar videos o imágenes, seleccionar una superficie y pulsar un clip. También se puede elegir **Color sólido**: preparar un color con el selector, una muestra o un hexadecimal de seis dígitos y pulsar **Aplicar color**. Cada superficie conserva su propio color. Incluye tres fuentes generativas para probar sin archivos.
 7. Ajustar opacidad, brillo, saturación, tono y mezcla. Activar perspectiva para cuadriláteros convexos de cuatro puntos sin curvas. Las demás superficies recortan el contenido sobre su caja envolvente.
-8. Guardar escenas y elegir fundido: corte, 0,5, 1 o 2 segundos. El fundido parte de una captura del estado anterior. Los clips son compartidos por las superficies y se reproducen en bucle, sin audio.
+8. Guardar escenas y elegir fundido: corte, 0,5, 1 o 2 segundos. Esta selección se usa al aplicar un nuevo color, cambiar entre color y clip o recuperar una escena. El fundido parte de una captura del estado anterior. Los clips son compartidos por las superficies y se reproducen en bucle, sin audio.
 9. **Proyectar** abre una ventana aparte. Moverla al proyector y activar pantalla completa con su botón o doble clic. El editor debe seguir abierto y sin minimizar. **Negro** apaga visualmente la salida.
 10. **Guardar proyecto** descarga un archivo `.luma` que incluye medios, foto, superficies y escenas. No hay guardado automático. **Abrir** recupera ese archivo en otra notebook.
 
@@ -41,6 +41,8 @@ La aplicación publicada requiere conexión para cargar. Para usar sin internet,
 - 40 MB por archivo; 120 MB de medios en total; hasta 80 clips y 50 escenas. Videos MP4 H.264 o WebM según soporte del navegador.
 - No incluye IA, mezcla de bordes entre proyectores, sincronización de notebooks, MIDI/OSC, audio ni malla de deformación avanzada.
 - Deshacer/rehacer cubre superficies, filtros, capas, nombres y escenas; la foto de referencia y las importaciones no se deshacen.
+- Los colores sólidos respetan curvas, huecos, opacidad, filtros y mezcla. El selector prepara el próximo color; **Aplicar color** dispara el cambio. Los colores se guardan en las escenas y en `.luma`; no hay secuencia automática de colores. La duración de fundido es un control de la sesión y no se guarda en el proyecto.
+- La beta 0.2 abre proyectos anteriores. Los proyectos que utilicen colores sólidos requieren la beta 0.2 o posterior.
 - La calibración de cuatro puntos corrige un plano. Objetos a distintas profundidades pueden necesitar ajustes por superficie.
 - Probar con el proyector y las notebooks del taller antes de utilizarla en una actividad en vivo.
 
